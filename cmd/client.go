@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"training_go/cmd/helpers"
-	"training_go/internal/services"
+	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/internal/services"
 
 	"github.com/julienschmidt/httprouter"
 )

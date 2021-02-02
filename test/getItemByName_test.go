@@ -3,12 +3,12 @@ package test
 import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/internal/services"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"training_go/cmd/helpers"
-	"training_go/internal/services"
 )
 
 func BaseTestItem(email string, appName string) *httptest.ResponseRecorder {

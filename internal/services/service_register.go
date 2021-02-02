@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/syx309/training_go/cmd/helpers"
 	"net/http"
-	"training_go/cmd/helpers"
 )
 
 func RouteRegister(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {

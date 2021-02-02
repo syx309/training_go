@@ -2,10 +2,10 @@ package test
 
 import (
 	"github.com/julienschmidt/httprouter"
+	"github.com/syx309/training_go/internal/services"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"training_go/internal/services"
 )
 
 func BaseTestUser(email string) *httptest.ResponseRecorder {

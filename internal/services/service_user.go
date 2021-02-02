@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/internal/dtos"
 	"net/http"
-	"training_go/cmd/helpers"
-	"training_go/internal/dtos"
 )
 
 func RouteUser(writer http.ResponseWriter, request *http.Request, _ httprouter.Params){
