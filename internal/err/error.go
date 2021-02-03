@@ -1,9 +1,9 @@
-package helpers
+package err
 
 import "net/http"
 
 const (
-	jwtKey       = "JWTtestingdoangbisaga"
+	JwtKey = "JWTtestingdoangbisagasih"
 )
 
 func ErrorForbidden(writer http.ResponseWriter) {

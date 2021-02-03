@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
 	"github.com/syx309/training_go/internal/dtos"
+	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
 
@@ -14,17 +15,17 @@ func RouteUser(writer http.ResponseWriter, request *http.Request, _ httprouter.P
 	userData := decodeUserData(request)
 
 	query := fmt.Sprintf(`SELECT id, name, email, password FROM users WHERE LOWER(email) = LOWER('%s')`, userData.Email)
-	row := helpers.DB.QueryRow(query)
+	row := datastore.DB.QueryRow(query)
 
 	var user dtos.User
 	err := row.Scan(&user.Id, &user.Name, &user.Email, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("Zero rows found")
-			helpers.ErrorNotFound(writer)
+			err2.ErrorNotFound(writer)
 			//panic(err)
 		} else {
-			helpers.ErrorInternal(writer)
+			err2.ErrorInternal(writer)
 			panic(err)
 		}
 	}
@@ -32,7 +33,7 @@ func RouteUser(writer http.ResponseWriter, request *http.Request, _ httprouter.P
 	data, marshallErr := json.Marshal(user)
 
 	if marshallErr != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(marshallErr)
 	}
 

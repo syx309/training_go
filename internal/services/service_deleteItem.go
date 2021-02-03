@@ -3,7 +3,8 @@ package services
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
+	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
 
@@ -12,9 +13,9 @@ func RouteDeleteItem(writer http.ResponseWriter, request *http.Request, _ httpro
 
 	query := `DELETE FROM items WHERE user_id = $1 AND items.id = $2`
 
-	_, err := helpers.DB.Exec(query, responseBody.UserId, responseBody.ItemId)
+	_, err := datastore.DB.Exec(query, responseBody.UserId, responseBody.ItemId)
 	if err != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(err)
 	}
 	writer.Write([]byte("Delete item SUCCESS"))
@@ -24,7 +25,7 @@ func decodeDeleteData(writer http.ResponseWriter, request *http.Request) DeleteI
 	decoder := json.NewDecoder(request.Body)
 	var itemData DeleteItemData
 	if err := decoder.Decode(&itemData); err != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(err)
 	}
 	return itemData

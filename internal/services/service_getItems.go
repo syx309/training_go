@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
 	"github.com/syx309/training_go/internal/dtos"
+	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
 
@@ -14,23 +15,23 @@ func RouteItems(writer http.ResponseWriter, request *http.Request,_ httprouter.P
 	userData := decodeUserData(request)
 
 	query := `SELECT id FROM users WHERE email = $1`
-	row := helpers.DB.QueryRow(query, userData.Email)
+	row := datastore.DB.QueryRow(query, userData.Email)
 
 	var user dtos.User
 	err := row.Scan(&user.Id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("Zero rows found")
-			helpers.ErrorNotFound(writer)
+			err2.ErrorNotFound(writer)
 			panic(err)
 		} else {
-			helpers.ErrorInternal(writer)
+			err2.ErrorInternal(writer)
 			panic(err)
 		}
 	}
 
 	var item dtos.Item
-	rows, err := helpers.DB.Query("SELECT id, user_id, app_name, app_email, app_password FROM items WHERE $1", user.Id)
+	rows, err := datastore.DB.Query("SELECT id, user_id, app_name, app_email, app_password FROM items WHERE $1", user.Id)
 	if err != nil {
 		fmt.Println("Query error")
 		panic(err)
@@ -53,7 +54,7 @@ func RouteItems(writer http.ResponseWriter, request *http.Request,_ httprouter.P
 	data, marshallErr := json.Marshal(items)
 
 	if marshallErr != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(marshallErr)
 	}
 

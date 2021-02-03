@@ -1,7 +1,8 @@
-package helpers
+package auth
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	err_ "github.com/syx309/training_go/internal/err"
 	"time"
 )
 
@@ -15,7 +16,7 @@ func GenerateJWT(email string) string {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	// Create the JWT string
-	tokenString, err := token.SignedString([]byte(jwtKey))
+	tokenString, err := token.SignedString([]byte(err_.JwtKey))
 	if err != nil {
 		panic(err)
 	}

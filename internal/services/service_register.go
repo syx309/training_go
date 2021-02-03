@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
+	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
 
@@ -12,9 +13,9 @@ func RouteRegister(writer http.ResponseWriter, request *http.Request, _ httprout
 	registerData := decodeRegister(writer, request)
 
 	query := fmt.Sprintf("INSERT INTO users (name, email, password) VALUES (\"%s\", \"%s\", \"%s\")", registerData.Name, registerData.Email, registerData.Password)
-	_, err := helpers.DB.Exec(query)
+	_, err := datastore.DB.Exec(query)
 	if err != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 	}
 
 	writer.Write([]byte("Register SUCCESS"))
@@ -24,7 +25,7 @@ func decodeRegister(writer http.ResponseWriter, request *http.Request) Register 
 	decoder := json.NewDecoder(request.Body)
 	var register Register
 	if err := decoder.Decode(&register); err != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(err)
 	}
 	return register

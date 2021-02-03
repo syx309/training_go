@@ -3,7 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
 	"github.com/syx309/training_go/internal/services"
 	"net/http"
 	"net/http/httptest"
@@ -12,7 +12,7 @@ import (
 )
 
 func BaseTestItem(email string, appName string) *httptest.ResponseRecorder {
-	helpers.InitDatabase()
+	datastore.InitDatabase()
 	router := httprouter.New()
 	router.POST("/user/item", services.RouteGetItemByName)
 

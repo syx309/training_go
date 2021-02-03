@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
 	"github.com/syx309/training_go/internal/dtos"
+	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
 
@@ -18,7 +19,7 @@ func RouteGetItemByName(writer http.ResponseWriter, request *http.Request, _ htt
 								ON items.user_id = users.id
 								WHERE users.email = $1 
 								AND LOWER(items.app_name) = LOWER($2)`
-	row := helpers.DB.QueryRow(query, responseBody.Email, responseBody.AppName)
+	row := datastore.DB.QueryRow(query, responseBody.Email, responseBody.AppName)
 
 	var item dtos.Item
 	err := row.Scan(&item.Id, &item.User_id, &item.App_name, &item.App_email, &item.App_password)
@@ -26,17 +27,17 @@ func RouteGetItemByName(writer http.ResponseWriter, request *http.Request, _ htt
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("Zero rows found")
-			helpers.ErrorNotFound(writer)
+			err2.ErrorNotFound(writer)
 			//panic(err)
 		} else {
-			helpers.ErrorInternal(writer)
+			err2.ErrorInternal(writer)
 			panic(err)
 		}
 	}
 	data, marshallErr := json.Marshal(item)
 
 	if marshallErr != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(marshallErr)
 	}
 
@@ -47,7 +48,7 @@ func decodeItemData(writer http.ResponseWriter, request *http.Request) GetItemDa
 	decoder := json.NewDecoder(request.Body)
 	var itemData GetItemData
 	if err := decoder.Decode(&itemData); err != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		//panic(err)
 	}
 	return itemData

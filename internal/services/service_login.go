@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/cmd/helpers"
+	"github.com/syx309/training_go/cmd/datastore"
+	"github.com/syx309/training_go/internal/auth"
 	"github.com/syx309/training_go/internal/dtos"
+	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
 
@@ -14,7 +16,7 @@ func RouteLogin(writer http.ResponseWriter, request *http.Request, _ httprouter.
 	loginData := decodeLogin(writer, request)
 
 	query := fmt.Sprintf(`SELECT id, name, email, password FROM users WHERE LOWER(email) = LOWER('%s')`, loginData.Email)
-	row := helpers.DB.QueryRow(query)
+	row := datastore.DB.QueryRow(query)
 
 	var user dtos.User
 	err := row.Scan(&user.Id, &user.Name, &user.Email, &user.Password)
@@ -22,15 +24,15 @@ func RouteLogin(writer http.ResponseWriter, request *http.Request, _ httprouter.
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Println("Zero rows found")
-			helpers.ErrorNotFound(writer)
+			err2.ErrorNotFound(writer)
 			panic(err)
 		} else {
-			helpers.ErrorInternal(writer)
+			err2.ErrorInternal(writer)
 			panic(err)
 		}
 	}
 
-	tokenString := helpers.GenerateJWT(user.Email)
+	tokenString := auth.GenerateJWT(user.Email)
 	writer.Write([]byte("Halo " + user.Email + ", token kamu: " + tokenString))
 }
 
@@ -38,7 +40,7 @@ func decodeLogin(writer http.ResponseWriter, request *http.Request) Login {
 	decoder := json.NewDecoder(request.Body)
 	var login Login
 	if err := decoder.Decode(&login); err != nil {
-		helpers.ErrorInternal(writer)
+		err2.ErrorInternal(writer)
 		panic(err)
 	}
 	return login
