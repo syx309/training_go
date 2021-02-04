@@ -1,10 +1,11 @@
-package services
+package user_services
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/syx309/training_go/cmd/datastore"
+	"github.com/syx309/training_go/internal/dtos"
 	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
@@ -21,18 +22,12 @@ func RouteRegister(writer http.ResponseWriter, request *http.Request, _ httprout
 	writer.Write([]byte("Register SUCCESS"))
 }
 
-func decodeRegister(writer http.ResponseWriter, request *http.Request) Register {
+func decodeRegister(writer http.ResponseWriter, request *http.Request) dtos.Register {
 	decoder := json.NewDecoder(request.Body)
-	var register Register
+	var register dtos.Register
 	if err := decoder.Decode(&register); err != nil {
 		err2.ErrorInternal(writer)
 		panic(err)
 	}
 	return register
-}
-
-type Register struct {
-	Email 		string `json:"email"`
-	Password 	string `json:"password"`
-	Name     	string `json:"name"`
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/syx309/training_go/cmd/datastore"
-	"github.com/syx309/training_go/internal/services"
+	"github.com/syx309/training_go/internal/usecase/item_services"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -14,7 +14,7 @@ import (
 func BaseTestItem(email string, appName string) *httptest.ResponseRecorder {
 	datastore.InitDatabase()
 	router := httprouter.New()
-	router.POST("/user/item", services.RouteGetItemByName)
+	router.POST("/user/item", item_services.RouteGetItemByName)
 
 	r := strings.NewReader(fmt.Sprintf("{\"email\": \"%s\", \"appName\": \"%s\"}", email, appName))
 	request, _ := http.NewRequest("POST", "/user/item", r)
@@ -34,7 +34,7 @@ func TestItemSuccess(t *testing.T) {
 }
 
 func TestItemFail(t *testing.T) {
-	response := BaseTestItem(emailSuccess,appNameFail)
+	response := BaseTestItem(emailSuccess, appNameFail)
 	if status := response.Code; status != http.StatusUnauthorized {
 		t.Log(status)
 		t.Errorf("Error Occured")

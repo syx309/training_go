@@ -1,9 +1,10 @@
-package services
+package item_services
 
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"github.com/syx309/training_go/cmd/datastore"
+	"github.com/syx309/training_go/internal/dtos"
 	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
@@ -21,9 +22,9 @@ func RouteUpdateItem(writer http.ResponseWriter, request *http.Request, _ httpro
 	writer.Write([]byte("Change Email and Password SUCCESS"))
 }
 
-func decodeUpdateData(writer http.ResponseWriter, request *http.Request) UpdateItemData {
+func decodeUpdateData(writer http.ResponseWriter, request *http.Request) dtos.UpdateItemData {
 	decoder := json.NewDecoder(request.Body)
-	var itemData UpdateItemData
+	var itemData dtos.UpdateItemData
 	if err := decoder.Decode(&itemData); err != nil {
 		err2.ErrorInternal(writer)
 		panic(err)
@@ -31,9 +32,4 @@ func decodeUpdateData(writer http.ResponseWriter, request *http.Request) UpdateI
 	return itemData
 }
 
-type UpdateItemData struct {
-	UserId   		string `json:"userID"`
-	AppName  		string `json:"appName"`
-	AppEmail  		string `json:"appEmail"`
-	AppPassword  	string `json:"appPassword"`
-}
+

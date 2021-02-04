@@ -10,3 +10,14 @@ type User struct {
 type UserData struct {
 	Email string
 }
+
+type Login struct {
+	Email 		string `json:"email"`
+	Password 	string `json:"password"`
+}
+
+type Register struct {
+	Email 		string `json:"email"`
+	Password 	string `json:"password"`
+	Name     	string `json:"name"`
+}

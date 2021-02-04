@@ -2,7 +2,7 @@ package test
 
 import (
 	"github.com/julienschmidt/httprouter"
-	"github.com/syx309/training_go/internal/services"
+	"github.com/syx309/training_go/internal/usecase/user_services"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -11,7 +11,7 @@ import (
 func BaseTestUser(email string) *httptest.ResponseRecorder {
 	//helpers.InitDatabase()
 	router := httprouter.New()
-	router.POST("/user", services.RouteUser)
+	router.POST("/user", user_services.RouteUser)
 
 	request, _ := http.NewRequest("POST", "/user", nil)
 	request.Header.Set("email", email)

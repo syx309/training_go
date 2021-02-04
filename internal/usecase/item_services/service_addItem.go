@@ -1,9 +1,10 @@
-package services
+package item_services
 
 import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"github.com/syx309/training_go/cmd/datastore"
+	"github.com/syx309/training_go/internal/dtos"
 	err2 "github.com/syx309/training_go/internal/err"
 	"net/http"
 )
@@ -22,19 +23,12 @@ func RouteAddItem(writer http.ResponseWriter, request *http.Request, _ httproute
 	writer.Write([]byte("Insert item SUCCESS"))
 }
 
-func decodeAddData(writer http.ResponseWriter, request *http.Request) AddItemData {
+func decodeAddData(writer http.ResponseWriter, request *http.Request) dtos.AddItemData {
 	decoder := json.NewDecoder(request.Body)
-	var itemData AddItemData
+	var itemData dtos.AddItemData
 	if err := decoder.Decode(&itemData); err != nil {
 		err2.ErrorInternal(writer)
 		panic(err)
 	}
 	return itemData
-}
-
-type AddItemData struct {
-	UserId   		string `json:"userID"`
-	AppName  		string `json:"appName"`
-	AppEmail  		string `json:"appEmail"`
-	AppPassword  	string `json:"appPassword"`
 }

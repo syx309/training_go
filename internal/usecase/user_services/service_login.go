@@ -1,4 +1,4 @@
-package services
+package user_services
 
 import (
 	"database/sql"
@@ -36,9 +36,9 @@ func RouteLogin(writer http.ResponseWriter, request *http.Request, _ httprouter.
 	writer.Write([]byte("Halo " + user.Email + ", token kamu: " + tokenString))
 }
 
-func decodeLogin(writer http.ResponseWriter, request *http.Request) Login {
+func decodeLogin(writer http.ResponseWriter, request *http.Request) dtos.Login {
 	decoder := json.NewDecoder(request.Body)
-	var login Login
+	var login dtos.Login
 	if err := decoder.Decode(&login); err != nil {
 		err2.ErrorInternal(writer)
 		panic(err)
@@ -46,7 +46,3 @@ func decodeLogin(writer http.ResponseWriter, request *http.Request) Login {
 	return login
 }
 
-type Login struct {
-	Email 		string `json:"email"`
-	Password 	string `json:"password"`
-}

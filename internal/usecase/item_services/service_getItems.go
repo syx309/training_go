@@ -1,4 +1,4 @@
-package services
+package item_services
 
 import (
 	"database/sql"
@@ -59,4 +59,10 @@ func RouteItems(writer http.ResponseWriter, request *http.Request,_ httprouter.P
 	}
 
 	_, _ = writer.Write(data)
+}
+
+func decodeUserData(request *http.Request) dtos.UserData {
+	var userData dtos.UserData
+	userData.Email = request.Header.Get("email")
+	return userData
 }

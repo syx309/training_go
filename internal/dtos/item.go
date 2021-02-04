@@ -11,3 +11,27 @@ type Item struct {
 type ItemData struct {
 	App_name string
 }
+
+type GetItemData struct {
+	Email   string `json:"email"`
+	AppName string `json:"appName"`
+}
+
+type AddItemData struct {
+	UserId   		string `json:"userID"`
+	AppName  		string `json:"appName"`
+	AppEmail  		string `json:"appEmail"`
+	AppPassword  	string `json:"appPassword"`
+}
+
+type DeleteItemData struct {
+	UserId   		string `json:"userID"`
+	ItemId  		string `json:"itemID"`
+}
+
+type UpdateItemData struct {
+	UserId   		string `json:"userID"`
+	AppName  		string `json:"appName"`
+	AppEmail  		string `json:"appEmail"`
+	AppPassword  	string `json:"appPassword"`
+}

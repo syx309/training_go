@@ -1,4 +1,4 @@
-package services
+package item_services
 
 import (
 	"database/sql"
@@ -44,17 +44,12 @@ func RouteGetItemByName(writer http.ResponseWriter, request *http.Request, _ htt
 	_, _ = writer.Write(data)
 }
 
-func decodeItemData(writer http.ResponseWriter, request *http.Request) GetItemData {
+func decodeItemData(writer http.ResponseWriter, request *http.Request) dtos.GetItemData {
 	decoder := json.NewDecoder(request.Body)
-	var itemData GetItemData
+	var itemData dtos.GetItemData
 	if err := decoder.Decode(&itemData); err != nil {
 		err2.ErrorInternal(writer)
 		//panic(err)
 	}
 	return itemData
-}
-
-type GetItemData struct {
-	Email   string `json:"email"`
-	AppName string `json:"appName"`
 }
